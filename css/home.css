@@ -1,0 +1,134 @@
+/*** container ***/
+	#container {
+		position: absolute;
+		width: calc(4 * (var(--card-size) + 2 * var(--small-gap-size)) - var(--medium-gap-size));
+		height: calc(4 * (var(--card-size) + 2 * var(--small-gap-size)) - var(--medium-gap-size));
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+		padding: var(--medium-gap-size);
+		border-radius: 100%;
+		background-color: transparent;
+		text-align: center;
+	}
+
+	/* heading */
+		#heading {
+			margin-top: var(--card-size);
+			text-align: center;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+		}
+
+	/* forms */
+		#new-game-form, #join-game-form {
+			display: inline-block;
+			box-sizing: border-box;
+			width: calc(2 * var(--card-size) + 2 * var(--small-gap-size));
+			height: calc(2 * var(--card-size) + 2 * var(--small-gap-size));
+			border-radius: 100%;
+			border: var(--small-gap-size) solid var(--dark-gray);
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+			box-shadow: 0 0 var(--shadow-size) var(--medium-gray);
+		}
+
+		#new-game-form {
+			margin-right: var(--small-gap-size);
+		}
+
+		#join-game-form {
+			margin-left: var(--small-gap-size);
+		}
+
+		#new-game-button {
+			position: relative;
+			font-size: var(--large-font-size);
+			box-sizing: border-box;
+			height: calc(2 * var(--card-size));
+			width: calc(2 * var(--card-size));
+			margin: 0;
+			border-radius: 100%;
+			line-height: 1.6;
+			background-image: url("assets/logo.png");
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			color: var(--dark-gray);
+			padding: 0;
+		}
+
+		#game-id-input {
+			font-size: var(--large-font-size);
+			float: right;
+			height: calc(var(--card-size) - var(--large-gap-size));
+			width: calc(2 * (var(--card-size) - 2 * var(--small-gap-size)));
+			margin: 0;
+			border-radius: 100%;
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+			text-transform: uppercase;
+			text-align: center;
+			padding: var(--large-gap-size) var(--medium-gap-size) 0 var(--medium-gap-size);
+		}
+
+		#join-game-button {
+			font-size: var(--large-font-size);
+			float: right;
+			margin: 0;
+			height: var(--card-size);
+			width: calc(2 * var(--card-size));
+			border-radius: 100%;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			padding: 0 var(--medium-gap-size) var(--large-gap-size) var(--medium-gap-size);
+		}
+
+/*** j-logo ***/
+	#j-logo {
+		position: absolute;
+		top: 14px;
+		right: 8px;
+		background-color: transparent;
+		background-image: url("https://jamesmayr.com/resources/j.png");
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center center;
+		height: 32px;
+		width: 32px;
+		cursor: pointer;
+		z-index: 1000;
+		outline: none;
+		filter: drop-shadow(0px 0px var(--shadow-size) var(--light-gray));
+	}
+
+	#j-logo:hover, #j-logo:focus {
+		filter: drop-shadow(0px 0px var(--shadow-size) var(--medium-gray));
+	}
+
+/*** background ***/
+	#puck-zone {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100vh;
+		width: 100vw;
+		overflow: hidden;
+	}
+
+	#puck-zone .puck {
+		position: absolute;
+		top: 0;
+		left: 0;
+		transform: translateX(-50%) translateY(-50%);
+		border-radius: 100%;
+		border: var(--border-width) solid var(--light-gray);
+		box-shadow: 0 0 var(--shadow-size) var(--light-gray);
+		height: calc(2 * var(--large-gap-size));
+		width: calc(2 * var(--large-gap-size));
+		pointer-events: none;
+	}

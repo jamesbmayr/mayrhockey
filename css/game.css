@@ -1,0 +1,86 @@
+/*** setup ***/
+	#setup {
+		z-index: 1;
+		padding: var(--medium-gap-size);
+		float: left;
+		width: calc(100vw - 2 * var(--medium-gap-size));
+		height: calc(100vh - 2 * var(--medium-gap-size));
+		overflow-x: hidden;
+		overflow-y: scroll;
+	}
+
+	body:not([mode="setup"]) #setup {
+		display: none;
+		pointer-events: none;
+	}
+
+	/* launch */
+		#setup-launch {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			text-align: center;
+		}
+
+		#setup-launch-button {
+			font-size: var(--huge-font-size);
+			height: calc(var(--huge-font-size) + 2 * var(--large-gap-size));
+			width: auto;
+			margin: auto auto;
+			border-radius: calc(3 * var(--large-gap-size));
+			padding: var(--large-gap-size);
+		}
+
+/*** arena ***/
+	#arena {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		border: 0;
+		border-radius: 0;
+		padding: 0;
+		margin: 0;
+		z-index: 0;
+		pointer-events: none;
+		cursor: none;
+		background: transparent;
+	}
+
+/*** again ***/
+	#again {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: auto;
+		height: auto;
+		transform: translateX(-50%) translateY(-50%);
+		background-color: var(--dark-gray);
+		border-radius: calc(3 * var(--large-gap-size));
+		box-shadow: 0 0 var(--shadow-size) var(--dark-gray);
+		padding: var(--large-gap-size);
+		text-align: center;
+	}
+
+	#again-message {
+		font-size: var(--medium-font-size);
+		text-align: center;
+		color: var(--light-gray);
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+	}
+
+	#again a {
+		font-size: var(--huge-font-size);
+		text-align: center;
+	}
+
+	body:not([mode="gameover"]) #again {
+		display: none;
+		pointer-events: none;
+	}

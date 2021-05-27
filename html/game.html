@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><script node>getAsset("title")</script>node></title>
+		<script node>getAsset("logo")</script>node>
+		<script node>getAsset("meta")</script>node>
+		<script node>getAsset("fonts")</script>node>
+		<script node>getAsset("css-variables")</script>node>
+		<link rel="stylesheet" href="main.css"/>
+		<link rel="stylesheet" href="game.css"/>
+		<script src="game.js"></script>
+	</head>
+	<body>
+		<canvas id="arena"></canvas>
+		<div id="setup">
+			<form id="setup-launch" class="setup-section" method="post" action="javascript:;">
+				<button id="setup-launch-button">LAUNCH [<script node>REQUEST.path[REQUEST.path.length - 1]</script>node>]</button>
+			</form>
+		</div>
+		<div id="again">
+			<div id="again-message"></div>
+			<a id="again-link" href="../">PLAY AGAIN</a>
+		</div>
+	</body>
+</html>
