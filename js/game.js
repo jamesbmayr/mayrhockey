@@ -46,7 +46,10 @@ window.addEventListener("load", function() {
 				context: document.querySelector("#arena").getContext("2d"),
 				setup: {
 					element: document.querySelector("#setup"),
-					launch: document.querySelector("#setup-launch")
+					launch: document.querySelector("#setup-launch"),
+					time: document.querySelector("#setup-time"),
+					pucks: document.querySelector("#setup-pucks"),
+					goal: document.querySelector("#setup-goal")
 				},
 				again: {
 					element: document.querySelector("#again"),
@@ -208,7 +211,6 @@ window.addEventListener("load", function() {
 					// no game yet
 						if (!GAME) {
 							GAME = data
-							return
 						}
 
 					// update status
@@ -222,6 +224,23 @@ window.addEventListener("load", function() {
 							if (data.status.endTime) {
 								ELEMENTS.body.setAttribute("mode", "gameover")
 								ELEMENTS.again.message.innerText = data.status.message.toUpperCase() || "GAME OVER"
+							}
+						}
+
+					// update settings
+						if (data.settings) {
+							GAME.settings = data.settings
+
+							if (!GAME.status.startTime) {
+								if (document.activeElement !== ELEMENTS.setup.time) {
+									ELEMENTS.setup.time.value = Math.floor(GAME.settings.gameTime / CONSTANTS.second)
+								}
+								if (document.activeElement !== ELEMENTS.setup.pucks) {
+									ELEMENTS.setup.pucks.value = GAME.settings.puckCountMaximum
+								}
+								if (document.activeElement !== ELEMENTS.setup.goal) {
+									ELEMENTS.setup.goal.value = GAME.settings.arenaWedgeAngleGoalChange
+								}
 							}
 						}
 
@@ -270,6 +289,31 @@ window.addEventListener("load", function() {
 			}
 	
 	/*** interaction ***/
+		/* launchGame */
+			ELEMENTS.setup.time.addEventListener("change", changeSetting)
+			ELEMENTS.setup.pucks.addEventListener("change", changeSetting)
+			ELEMENTS.setup.goal.addEventListener("change", changeSetting)
+			function changeSetting(event) {
+				try {
+					// set interacted
+						INTERACTED = true
+
+					// not a player
+						if (!PLAYERID || !GAME.players[PLAYERID]) {
+							return false
+						}
+
+					// send update
+						SOCKET.send(JSON.stringify({
+							action: "changeSetting",
+							playerId: PLAYERID,
+							gameId: GAME.id,
+							setting: event.target.id.split("-")[1] || null,
+							value: Number(event.target.value) || null
+						}))
+				} catch (error) {console.log(error)}
+			}
+
 		/* launchGame */
 			ELEMENTS.setup.launch.addEventListener("submit", launchGame)
 			function launchGame(event) {

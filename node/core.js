@@ -271,7 +271,7 @@
 									messageTimeRemaining: null
 								},
 								settings: {
-									gameTime: 1000 * 60 * 3,
+									gameTime: 1000 * 60 * 2,
 									gameLaunchDelay: 3000,
 									playerColors: {
 										red: [colors["light-red"], colors["medium-red"], colors["dark-red"]],
@@ -309,7 +309,7 @@
 									arenaBorderWidth: 2,
 									arenaBorderOpacity: 1,
 									arenaWedgeAngleNeutral: 10,
-									arenaWedgeAngleGoalChange: 1,
+									arenaWedgeAngleGoalChange: 2,
 									arenaWedgeAngleGoalMinimum: 20,
 									arenaWedgeOpacity: 1,
 									arenaWedgeGlowColor: colors["light-gray"],

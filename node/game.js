@@ -259,7 +259,7 @@
 					}
 
 				// action
-					if (!REQUEST.post || !REQUEST.post.action || !["moveMouse", "launchGame"].includes(REQUEST.post.action)) {
+					if (!REQUEST.post || !REQUEST.post.action || !["moveMouse", "launchGame", "changeSetting"].includes(REQUEST.post.action)) {
 						callback({gameId: gameId, success: false, message: "invalid action", recipients: [REQUEST.session.id]})
 						return
 					}
@@ -292,6 +292,12 @@
 							}
 
 
+						// change setting
+							if ("changeSetting" == REQUEST.post.action) {
+								updateSetting(REQUEST, game, callback)
+								return
+							}
+
 						// start game
 							if ("launchGame" == REQUEST.post.action) {
 								updateLaunch(REQUEST, game, callback)
@@ -301,6 +307,72 @@
 						// cursor
 							updatePlayer(REQUEST, game, player, callback)
 							return
+					})
+			}
+			catch (error) {
+				CORE.logError(error)
+				callback({gameId: REQUEST.path[REQUEST.path.length - 1], success: false, message: "unable to " + arguments.callee.name, recipients: [REQUEST.session.id]})
+			}
+		}
+
+	/* updateSetting */
+		module.exports.updateSetting = updateSetting
+		function updateSetting(REQUEST, game, callback) {
+			try {
+				// already started?
+					if (game.status && game.status.startTime) {
+						callback({gameId: gameId, success: false, message: "game already started", recipients: [REQUEST.session.id]})
+						return
+					}
+
+				// invalid setting
+					if (!REQUEST.post.setting || !["time", "pucks", "goal"].includes(REQUEST.post.setting)) {
+						callback({gameId: gameId, success: false, message: "invalid setting", recipients: [REQUEST.session.id]})
+						return
+					}
+					if (!REQUEST.post.value || isNaN(REQUEST.post.value)) {
+						callback({gameId: gameId, success: false, message: "invalid value", recipients: [REQUEST.session.id]})
+						return
+					}
+
+				// update value
+					if (REQUEST.post.setting == "time") {
+						game.settings.gameTime = Math.floor(REQUEST.post.value * CONSTANTS.second)
+					}
+					if (REQUEST.post.setting == "pucks") {
+						game.settings.puckCountMaximum = Math.floor(REQUEST.post.value)
+					}
+					if (REQUEST.post.setting == "goal") {
+						game.settings.arenaWedgeAngleGoalChange = Math.floor(REQUEST.post.value)
+					}
+
+				// query
+					game.updated = new Date().getTime()
+					var query = CORE.getSchema("query")
+						query.collection = "games"
+						query.command = "update"
+						query.filters = {id: game.id}
+						query.document = game
+
+				// update
+					CORE.accessDatabase(query, function(results) {
+						if (!results.success) {
+							results.gameId = game.id
+							callback(results)
+							return
+						}
+
+						// recipients
+							var recipients = []
+							for (var i in game.players) {
+								recipients.push(game.players[i].sessionId)
+							}
+							for (var i in game.spectators) {
+								recipients.push(i)
+							}
+
+						// send game data to everyone
+							callback({gameId: game.id, success: true, game: {settings: game.settings}, recipients: recipients})
 					})
 			}
 			catch (error) {
@@ -953,7 +1025,7 @@
 							winners.push(game.players[i].color.toUpperCase())
 						}
 						else if (game.players[i].goal.angularWidth > winningAngle) {
-							winningAngle = game.players[i].points
+							winningAngle = game.players[i].goal.angularWidth
 							winners = [game.players[i].color.toUpperCase()]
 						}
 					}

@@ -356,6 +356,7 @@
 				switch (REQUEST.post.action) {
 					// game
 						// update
+							case "changeSetting":
 							case "launchGame":
 							case "moveMouse":
 								try {
