@@ -56,7 +56,7 @@ window.addEventListener("load", function() {
 				circleDegrees: 360,
 				radiansConversion: Math.PI / 180,
 				largeMultiplier: 1000000000000,
-				puckCount: 24,
+				puckCount: 18,
 				puckVelocityMinimum: 6,
 				puckVelocityMaximum: 12,
 				puckEdge: 100,

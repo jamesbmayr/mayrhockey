@@ -437,7 +437,11 @@ window.addEventListener("load", function() {
 						context.globalAlpha = options.opacity !== undefined ? options.opacity : 1
 
 					// draw
-						if (options.border) {
+						if (options.clip) {
+							context.arc(options.x, canvas.height - options.y, options.radius, (options.start || 0), (options.end || CONSTANTS.circleRadians))
+							context.clip()
+						}
+						else if (options.border) {
 							context.arc(options.x, canvas.height - options.y, options.radius, (options.start || 0), (options.end || CONSTANTS.circleRadians))
 							context.stroke()
 						}
@@ -516,13 +520,23 @@ window.addEventListener("load", function() {
 									drawPuck(canvas, context, game, game.pucks[i])
 								}
 
-							// draw cente
+							// draw center
 								drawCircle(canvas, context, {
 									color: game.settings.arenaCenterBackgroundColor,
 									opacity: game.settings.arenaCenterOpacity,
 									x: 0,
 									y: 0,
 									radius: game.settings.arenaCenterRadius
+								})
+
+							// clip
+								drawCircle(canvas, context, {
+									color: game.settings.arenaBackgroundColor,
+									opacity: game.settings.arenaBackgroundOpacity,
+									x: 0,
+									y: 0,
+									radius: game.settings.arenaRadius,
+									clip: true
 								})
 						})
 

@@ -833,41 +833,59 @@
 					var newY = Math.round((puck.position.y + puck.velocity.y) * CONSTANTS.rounding) / CONSTANTS.rounding
 					var newRadialCoordinates = getRadialCoordinates(newX, newY)
 
-				// edge
-					if (newRadialCoordinates.r > game.settings.arenaRadius) {
-						// claimed?
-							if (puck.colors && puck.colors.length) {
-								// goal --> eliminate & score
-									for (var i in game.players) {
-										// get player
-											var thatPlayer = game.players[i]
+				// touching edge
+					if (newRadialCoordinates.r + game.settings.puckRadius > game.settings.arenaRadius) {
+						// determine goal
+							var goalPlayer = null
 
-										// get goal
-											var startAngle = ((thatPlayer.goal.centerAngle - thatPlayer.goal.angularWidth / 2) + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees
-											var endAngle =   ((thatPlayer.goal.centerAngle + thatPlayer.goal.angularWidth / 2) + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees
+						// within a goal?
+							for (var i in game.players) {
+								// get player
+									var thatPlayer = game.players[i]
 
-											if (((newRadialCoordinates.a - startAngle + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees < (endAngle - startAngle + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees)
-											 && ((  endAngle - newRadialCoordinates.a + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees < (endAngle - startAngle + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees)) {
-												calculateGoal(game, thatPlayer, puck)
-												return
-											}
+								// get goal
+									var startAngle = ((thatPlayer.goal.centerAngle - thatPlayer.goal.angularWidth / 2) + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees
+									var endAngle =   ((thatPlayer.goal.centerAngle + thatPlayer.goal.angularWidth / 2) + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees
+
+								// within a goal
+									if (((newRadialCoordinates.a - startAngle + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees < (endAngle - startAngle + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees)
+									 && ((  endAngle - newRadialCoordinates.a + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees < (endAngle - startAngle + CONSTANTS.circleDegrees) % CONSTANTS.circleDegrees)) {
+										goalPlayer = thatPlayer
+										break
 									}
 							}
 
-						// neutral --> reflection
-							var currentVelocity = getRadialCoordinates(puck.velocity.x, puck.velocity.y)
-							var reflectionAngle = getReflection(currentVelocity.a, (newRadialCoordinates.a + CONSTANTS.circleDegrees / 4) % CONSTANTS.circleDegrees)
+						// goalPlayer AND colors AND past the edge --> calculate goal
+							if (goalPlayer && puck.colors && puck.colors.length && (newRadialCoordinates.r - game.settings.puckRadius > game.settings.arenaRadius)) {
+								calculateGoal(game, goalPlayer, puck)
+								return
+							}
 
-						// update velocity
-							puck.velocity = getCartesianCoordinates(currentVelocity.r, reflectionAngle)
+						// neutral zone OR neutral puck --> reflection
+							if (!goalPlayer || !puck.colors || !puck.colors.length) {
+								// reflection angle
+									var currentVelocity = getRadialCoordinates(puck.velocity.x, puck.velocity.y)
+									var reflectionAngle = getReflection(currentVelocity.a, (newRadialCoordinates.a + CONSTANTS.circleDegrees / 4) % CONSTANTS.circleDegrees)
 
-						// record collision
-							puck.lastCollision = null
+								// update velocity
+									puck.velocity = getCartesianCoordinates(currentVelocity.r, reflectionAngle)
+
+								// record collision
+									puck.lastCollision = null
+									var edgeNudge = getCartesianCoordinates((newRadialCoordinates.r + game.settings.puckRadius) - game.settings.arenaRadius, reflectionAngle)
+							}
 					}
 
 				// update position
 					puck.position.x = newX
 					puck.position.y = newY
+
+				// puck-edge collision
+					if (edgeNudge) {
+						// nudge inside of edge
+							puck.position.x += edgeNudge.x
+							puck.position.y += edgeNudge.y
+					}
 
 				// puck-puck collisions
 					for (var i in game.pucks) {
@@ -939,6 +957,11 @@
 									var puckRadialVelocity = getRadialCoordinates(puck.velocity.x + ax, puck.velocity.y + ay)
 										puckRadialVelocity.r = Math.min(puckRadialVelocity.r, game.settings.puckVelocityMaximum)
 									puck.velocity = getCartesianCoordinates(puckRadialVelocity.r, puckRadialVelocity.a)
+
+								// nudge outside of player
+									var nudge = getCartesianCoordinates(overlap.d, overlap.a)
+									puck.position.x += nudge.x
+									puck.position.y += nudge.y
 
 								// different from last collision?
 									if (puck.lastCollision !== i) {

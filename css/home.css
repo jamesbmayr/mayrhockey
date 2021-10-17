@@ -128,7 +128,7 @@
 		border-radius: 100%;
 		border: var(--border-width) solid var(--light-gray);
 		box-shadow: 0 0 var(--shadow-size) var(--light-gray);
-		height: calc(2 * var(--large-gap-size));
-		width: calc(2 * var(--large-gap-size));
+		height: calc(3 * var(--large-gap-size));
+		width: calc(3 * var(--large-gap-size));
 		pointer-events: none;
 	}
