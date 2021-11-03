@@ -272,7 +272,7 @@
 								},
 								settings: {
 									gameTime: 1000 * 60 * 2,
-									gameLaunchDelay: 3000,
+									gameLaunchDelay: 4000,
 									playerColors: {
 										red: [colors["light-red"], colors["medium-red"], colors["dark-red"]],
 										orange: [colors["light-orange"], colors["medium-orange"], colors["dark-orange"]],
@@ -287,6 +287,7 @@
 									playerOpacity: 1,
 									playerGlowColor: colors["light-gray"],
 									playerGlowBlur: 5,
+									playerVelocityMaximum: 10,
 									puckBorderWidth: 2,
 									puckBorderOpacity: 1,
 									puckBorderColor: colors["light-gray"],

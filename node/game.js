@@ -954,14 +954,14 @@
 									var ay = (Math.sin(overlap.a * CONSTANTS.radiansConversion) * centerToCenterDistance) - (puck.position.y - thatPlayer.position.y)
 
 								// update velocity
-									var puckRadialVelocity = getRadialCoordinates(puck.velocity.x + ax, puck.velocity.y + ay)
+									var puckRadialVelocity = getRadialCoordinates(puck.velocity.x + ax * 2, puck.velocity.y + ay * 2)
 										puckRadialVelocity.r = Math.min(puckRadialVelocity.r, game.settings.puckVelocityMaximum)
 									puck.velocity = getCartesianCoordinates(puckRadialVelocity.r, puckRadialVelocity.a)
 
 								// nudge outside of player
 									var nudge = getCartesianCoordinates(overlap.d, overlap.a)
-									puck.position.x += nudge.x
-									puck.position.y += nudge.y
+									puck.position.x += nudge.x + puck.velocity.x
+									puck.position.y += nudge.y + puck.velocity.y
 
 								// different from last collision?
 									if (puck.lastCollision !== i) {
