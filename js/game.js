@@ -111,6 +111,7 @@ window.addEventListener("load", function() {
 		/* start */
 			var SOCKET = null
 			var SOCKETCHECK = null
+			var PINGINTERVAL = 60 * 1000
 			checkSocket()
 
 		/* checkSocket */
@@ -156,6 +157,15 @@ window.addEventListener("load", function() {
 						}
 						catch (error) {console.log(error)}
 					}
+
+					if (SOCKET.pingLoop) {
+						clearInterval(SOCKET.pingLoop)
+					}
+					SOCKET.pingLoop = setInterval(function() {
+						fetch("/ping", {method: "GET"})
+							.then(function(response){ return response.json() })
+							.then(function(data) {})
+					}, PINGINTERVAL)
 				}
 				catch (error) {console.log(error)}
 			}
