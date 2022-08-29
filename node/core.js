@@ -355,9 +355,9 @@
 									<meta name="description" content="MayrHockey is a top-down air hockey arena for 2-6 players"/>
 									<meta name="author" content="James Mayr"/>
 									<meta property="og:title" content="MayrHockey"/>
-									<meta property="og:url" content="https://mayrhockey.herokuapp.com/"/>
+									<meta property="og:url" content="https://jamesmayr.com/mayrhockey/"/>
 									<meta property="og:description" content="MayrHockey is a top-down air hockey arena for 2-6 players"/>
-									<meta property="og:image" content="https://mayrhockey.herokuapp.com/banner.png"/>
+									<meta property="og:image" content="https://jamesmayr.com/mayrhockey/banner.png"/>
 									<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>`
 						break
 						case "fonts":
